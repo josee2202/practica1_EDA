@@ -33,6 +33,44 @@ def dame_variables_categoricas(dataset=None, max_unique_values = 100):
 
     return lista_var_categoricas, lista_var_altas_dimensiones
 
+def graficar_nan_distribucion_target(df, col_name):
+    """
+    Grafica la distribución de TARGET para las filas con NaN en col_name.
+    """
+    try:
+        # Identificar las filas con valores NaN
+        filas_nulas = df[col_name].isnull()
+        filas_nulas_df = df.loc[filas_nulas]
+
+        if filas_nulas_df.empty:
+            print(f"La columna {col_name} no tiene valores NaN.")
+            return
+
+        plt.figure(figsize=(6, 4))
+        sns.countplot(data=filas_nulas_df, x='TARGET', palette='pastel', edgecolor='black')
+
+        # Añadir etiquetas y título
+        plt.title(f'Distribución de TARGET en filas con {col_name} nulo', fontsize=16)
+        plt.xlabel('TARGET', fontsize=14)
+        plt.ylabel('Count', fontsize=14)
+
+        # Calcular el total de filas con valores nulos
+        total = len(filas_nulas_df)
+
+        # Obtener el conteo de cada categoría en TARGET
+        counts = filas_nulas_df['TARGET'].value_counts()
+
+        # Añadir porcentajes como texto en el gráfico
+        for i, (category, value) in enumerate(counts.items()):
+            percentage = f"{(value / total) * 100:.2f}%"  # Calcular porcentaje
+            plt.text(i, value , percentage, ha='center', fontsize=6, color='black')  # Ajustar posición de texto
+
+        plt.show()
+
+    except Exception as e:
+        print(f"Error al procesar la columna {col_name}: {e}")
+
+
 
 import os
 print(os.getcwd())
