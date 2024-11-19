@@ -2,6 +2,8 @@
 
 import numpy as np
 import pandas as pd
+from rich.console import Console    ## Necesarias para ver los tipos potenciales de variabels
+from rich.table import Table
 
 def dame_variables_categoricas(dataset=None, max_unique_values = 100):
     '''
@@ -32,6 +34,78 @@ def dame_variables_categoricas(dataset=None, max_unique_values = 100):
                 lista_var_altas_dimensiones.append(i)
 
     return lista_var_categoricas, lista_var_altas_dimensiones
+
+
+def analizar_variables(dataset):
+    """
+    Analiza las variables de un DataFrame y genera una tabla en consola con:
+    - Nombre de la variable.
+    - Tipo actual.
+    - Tipo potencial (categoría, numérica, booleana, etc.).
+    - Ejemplos de valores únicos.
+
+    Utiliza la **** LIBRERÍA `rich` **** para una representación visual mejorada.
+    """
+    console = Console()
+    table = Table(title="Análisis de Variables", show_header=True, header_style="bold cyan")
+    table.add_column("Variable", style="bold white", no_wrap=True)
+    table.add_column("Tipo Actual", style="dim white", no_wrap=True)
+    table.add_column("Tipo Potencial", style="bold yellow", no_wrap=True)
+    table.add_column("Ejemplos Únicos", style="bold green", no_wrap=False)
+
+    for col in dataset.columns:
+        dtype = str(dataset[col].dtypes)
+        unique_values = dataset[col].dropna().unique()
+        num_unique = len(unique_values)
+
+        # Determinar el tipo actual
+        if dtype.startswith('int'):
+            tipo_actual = "int64"
+        elif dtype.startswith('float'):
+            tipo_actual = "float64"
+        elif dtype == 'object':
+            tipo_actual = "object"
+        elif dtype == 'bool':
+            tipo_actual = "bool"
+        else:
+            tipo_actual = "otro"
+
+        # Determinar el tipo potencial
+        if num_unique == len(dataset):  # ID si todos los valores son únicos
+            tipo_potencial = "[bright_blue]ID[/bright_blue]"
+        elif tipo_actual == "bool" or (num_unique == 2):
+            tipo_potencial = "[bright_green]Booleana[/bright_green]"
+        elif num_unique < 100:
+            tipo_potencial = "[bright_yellow]Categoría[/bright_yellow]"
+        else:
+            tipo_potencial = "[bright_red]Numérica[/bright_red]"
+
+        # Seleccionar algunos ejemplos de valores únicos
+        ejemplos = ", ".join(map(str, unique_values[:5])) + ("..." if num_unique > 5 else "")
+
+        table.add_row(col, tipo_actual, tipo_potencial, ejemplos)
+
+    console.print(table)
+
+
+def optimizar_tipo_longitud(df, col_type):
+    for col in df.select_dtypes(include=[col_type]).columns:
+        longitudes = df[col].dropna().astype(str).str.len()
+        min_len = longitudes.min()
+        max_len = longitudes.max()
+
+        print(f"Columna: {col} | Longitud mínima: {min_len} | Longitud máxima: {max_len}")
+        
+        if max_len <= 5:  # Números pequeños
+            df[col] = df[col].astype('int16')
+            print(f" - Convertida a int16.")
+        elif max_len <= 10:  # Números más grandes
+            df[col] = df[col].astype('int32')
+            print(f" - Convertida a int32.")
+        else:
+            print(f" - Se mantiene como int64.")
+
+
 
 def graficar_nan_distribucion_target(df, col_name):
     """
@@ -72,8 +146,34 @@ def graficar_nan_distribucion_target(df, col_name):
 
 
 
-import os
-print(os.getcwd())
+def calcular_porcentaje_target(df, columna):
+    """
+    Calcula el porcentaje de valores 1 en la columna TARGET
+    para las filas donde una columna específica tiene valores NaN.
+
+    Parámetros:
+    - df (DataFrame): El dataframe que contiene los datos.
+    - columna (str): El nombre de la columna a analizar.
+
+    Retorna:
+    - float: El porcentaje de valores 1 en la columna TARGET.
+    """
+    # Identificar las filas con valores NaN
+    filas_nulas = df[columna].isnull()
+    filas_nulas_df = df.loc[filas_nulas]
+    
+    # Contar los valores de TARGET
+    target_counts = filas_nulas_df['TARGET'].value_counts()
+
+    # Calcular el porcentaje de valores 1
+    porcentaje_target = round((target_counts.get(1, 0) / target_counts.sum()) * 100, 2)
+    
+    return columna, porcentaje_target
+
+
+
+
+
 
 
 
