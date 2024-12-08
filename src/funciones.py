@@ -632,6 +632,3 @@ def calculate_woe_iv(df, feature, target):
     
     return feature_stats[['good_dist', 'bad_dist', 'WoE', 'IV']], total_iv
 
-
-
-
