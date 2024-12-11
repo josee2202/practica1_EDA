@@ -5,6 +5,12 @@ import pandas as pd
 from rich.console import Console    ## Necesarias para ver los tipos potenciales de variabels
 from rich.table import Table
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.metrics import accuracy_score, balanced_accuracy_score,average_precision_score, precision_recall_curve, recall_score, precision_score, f1_score, fbeta_score
+from sklearn.metrics import confusion_matrix, classification_report, make_scorer
+from sklearn.metrics import ConfusionMatrixDisplay, roc_curve, roc_auc_score, auc
 
 #### NOTEBOOK 1 ####
 
@@ -632,3 +638,38 @@ def calculate_woe_iv(df, feature, target):
     
     return feature_stats[['good_dist', 'bad_dist', 'WoE', 'IV']], total_iv
 
+
+
+################# Evaluación modelos (03_.ipynb) ##################
+
+def fast_eval(model, x_val, y_val, y_pred):
+    """
+    Evalúa rápidamente un modelo entrenado.
+    
+    Parámetros:
+        model : modelo entrenado (RandomizedSearchCV o similar)
+        x_val : array-like, Datos de entrada de validación o test
+        y_val : array-like, Etiquetas reales de validación o test
+        y_pred : array-like, Etiquetas predichas por el modelo
+    """
+    # Imprimir los mejores parámetros y el mejor score si es un RandomizedSearchCV o GridSearchCV
+    if hasattr(model, "best_params_"):
+        print("Mejores parámetros:", model.best_params_)
+        print("Mejor score (validación cruzada):", model.best_score_)
+    
+    # Imprimir reporte de clasificación
+    print("\nReporte de clasificación:")
+    print(classification_report(y_val, y_pred))
+    
+    # Mostrar la matriz de confusión normalizada
+    disp = ConfusionMatrixDisplay.from_estimator(
+        model, x_val, y_val,
+        cmap=plt.cm.Blues,
+        normalize='true'
+    )
+    disp.ax_.set_title('Matriz de Confusión Normalizada')
+    plt.show()
+
+    # Imprimir la matriz de confusión numérica
+    print("\nMatriz de confusión (normalizada):")
+    print(disp.confusion_matrix)
