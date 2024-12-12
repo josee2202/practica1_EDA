@@ -407,6 +407,7 @@ def crear_lista_tratamiento(df, cont_cols, threshold=25):
 
 
 def get_deviation_of_mean_perc(pd_loan, list_var_continuous, target, multiplier):
+    ### La dejo aquí porque me da problemas al pasarla al .py
     """
     Devuelve un DataFrame que muestra el porcentaje de valores que exceden el intervalo de confianza,
     junto con la distribución del target para esos valores.
