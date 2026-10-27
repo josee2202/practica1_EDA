@@ -57,6 +57,8 @@ data/: Contiene los datos usados en el proyecto.
 
 src/: Código con las funciones usadas.
 
+models/: modelo entrenado
+
 notebooks/
 
 html/: Reportes exportados en formato HTML.
