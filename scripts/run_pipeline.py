@@ -27,6 +27,8 @@ from nbclient import NotebookClient
 ROOT = Path(__file__).resolve().parents[1]
 STAGES = ['01', '02', '03', '04', '05']
 RAW_DATA = Path('data/raw_data/application_data.csv')
+# Folders the notebooks write into; data/ is not versioned, so a fresh clone lacks them
+OUTPUT_DIRS = ['data/processed_data', 'data/variables', 'modelos', 'reports/figures']
 
 
 def find_notebook(nb_dir, prefix):
@@ -65,7 +67,7 @@ def prepare_synthetic_workspace(workdir, rows, seed):
     for prefix in STAGES:
         shutil.copy2(find_notebook(ROOT / 'notebooks', prefix), workdir / 'notebooks')
     shutil.copytree(ROOT / 'src', workdir / 'src', ignore=shutil.ignore_patterns('__pycache__'))
-    for sub in ['data/raw_data', 'data/processed_data', 'data/variables', 'modelos', 'reports/figures']:
+    for sub in ['data/raw_data'] + OUTPUT_DIRS:
         (workdir / sub).mkdir(parents=True, exist_ok=True)
     df = make_synthetic_application_data(rows, seed=seed)
     df.to_csv(workdir / RAW_DATA, index=False)
@@ -126,7 +128,9 @@ def main():
     else:
         root = ROOT
         if args.start == '01' and not (root / RAW_DATA).is_file():
-            sys.exit(f'Raw data not found at {root / RAW_DATA}. See the README section "Data".')
+            sys.exit(f'Raw data not found at {root / RAW_DATA}. See data/README.md.')
+        for sub in OUTPUT_DIRS:
+            (root / sub).mkdir(parents=True, exist_ok=True)
 
     stages = STAGES[STAGES.index(args.start):STAGES.index(args.stop) + 1]
     for prefix in stages:

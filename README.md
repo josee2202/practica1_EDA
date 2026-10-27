@@ -112,7 +112,7 @@ Artifacts OK. Test metrics (threshold 0.5): {"accuracy": 0.8117, "balanced_accur
 
 Where the time goes: in notebook 03, RFE (about 63 min) and Boruta (about 36 min), and in notebook 04 the randomized search for the logistic regression (about 40 min). Each notebook writes its outputs to disk, so after a change you can rerun only the affected stages.
 
-Single notebooks can be rerun with `--start` / `--stop` (for example `--start 04 --stop 05`), or opened in Jupyter from the `notebooks/` folder.
+Single notebooks can be rerun with `--start` / `--stop` (for example `--start 04 --stop 05`), or opened in Jupyter from the `notebooks/` folder. The runner creates the output folders; when running the notebooks by hand on a fresh clone, create them first with `mkdir -p data/processed_data data/variables reports/figures`.
 
 ## Configuration
 
