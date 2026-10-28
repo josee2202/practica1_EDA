@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    # Runs notebooks 01-05 on a synthetic dataset with the real schema. The real data is not
+    # redistributed, so this checks that the code runs end to end, not model performance.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            constraints.txt
+
+      - name: Install pinned dependencies
+        run: pip install -r requirements.txt -c constraints.txt pytest==8.3.3
+
+      - name: Tests (static checks + synthetic end-to-end run)
+        env:
+          SMOKE_WORKDIR: build/smoke
+        run: pytest -v tests
+
+      - name: Upload executed smoke notebooks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-run
+          path: |
+            build/smoke/notebooks
+            build/smoke/reports
+          if-no-files-found: ignore

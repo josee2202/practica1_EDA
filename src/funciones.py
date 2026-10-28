@@ -7,6 +7,8 @@ from rich.table import Table
 
 import matplotlib.pyplot as plt
 import seaborn as sns
+import scipy.stats as ss                      ## cramers_v
+from scipy.stats import chi2_contingency      ## cramers_v_heatmap_with_high_corr
 
 from sklearn.metrics import accuracy_score, balanced_accuracy_score,average_precision_score, precision_recall_curve, recall_score, precision_score, f1_score, fbeta_score
 from sklearn.metrics import confusion_matrix, classification_report, make_scorer
