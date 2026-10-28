@@ -1,0 +1,74 @@
+{
+  "data": {
+    "n_test": 61503,
+    "positive_rate_test": 0.0807,
+    "n_features": 26,
+    "features": [
+      "AMT_CREDIT",
+      "AMT_ANNUITY",
+      "AMT_GOODS_PRICE",
+      "NAME_INCOME_TYPE_Working",
+      "NAME_INCOME_TYPE_Pensioner",
+      "NAME_INCOME_TYPE_State servant",
+      "NAME_INCOME_TYPE_Commercial associate",
+      "DAYS_EMPLOYED",
+      "FLAG_EMP_PHONE",
+      "REGION_RATING_CLIENT_W_CITY",
+      "ORGANIZATION_TYPE",
+      "EXT_SOURCE_1",
+      "EXT_SOURCE_2",
+      "EXT_SOURCE_3",
+      "BASEMENTAREA_AVG",
+      "ENTRANCES_AVG",
+      "LIVINGAREA_AVG",
+      "ELEVATORS_MODE",
+      "APARTMENTS_MEDI",
+      "BASEMENTAREA_MEDI",
+      "ELEVATORS_MEDI",
+      "ENTRANCES_MEDI",
+      "LIVINGAREA_MEDI",
+      "OBS_30_CNT_SOCIAL_CIRCLE",
+      "OBS_60_CNT_SOCIAL_CIRCLE",
+      "FLAG_DOCUMENT_3"
+    ]
+  },
+  "model": "LogisticRegression",
+  "roc_auc": 0.7318,
+  "pr_auc": 0.205,
+  "threshold_0.5": {
+    "accuracy": 0.8117,
+    "balanced_accuracy": 0.6454,
+    "precision": 0.2008,
+    "recall": 0.4471,
+    "f1": 0.2771,
+    "f2": 0.359
+  },
+  "threshold_f2_validation": {
+    "threshold": 0.3771,
+    "accuracy": 0.6875,
+    "balanced_accuracy": 0.6726,
+    "precision": 0.1566,
+    "recall": 0.6548,
+    "f1": 0.2528,
+    "f2": 0.4002
+  },
+  "threshold_f2_test_optimistic": {
+    "threshold": 0.3469,
+    "accuracy": 0.6465,
+    "balanced_accuracy": 0.6739,
+    "precision": 0.1474,
+    "recall": 0.7065,
+    "f1": 0.244,
+    "f2": 0.4018
+  },
+  "baseline_prior": {
+    "roc_auc": 0.5,
+    "pr_auc": 0.0807,
+    "accuracy": 0.9193,
+    "balanced_accuracy": 0.5,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "f2": 0.0
+  }
+}

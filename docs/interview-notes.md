@@ -18,7 +18,7 @@ Short prep notes for discussing this project. "Original work" means the November
 ## Main difficulties and how they were solved
 
 - **Imbalance** (original): accuracy was misleading, so the evaluation moved to recall, F2 and PR AUC, plus rebalancing.
-- **Cost of wrapper methods** (original): on 246,008 rows x 148 features, RFE took about an hour and Boruta about 36 minutes, with no clear gain over the regularised-logistic selector (best F2 for the L2 set; Boruta's 57 features gave a PR AUC of 0.227 against 0.220 with the logistic regression).
+- **Cost of wrapper methods** (original): on 246,008 rows x 148 features, RFE took about 42 minutes and Boruta about 32 on an 8-core laptop, with no clear gain over the regularised-logistic selector (best F2 for the L2 set; Boruta's 57 features gave a PR AUC of 0.227 against 0.220 with the logistic regression).
 - **KNN imputation at scale** (original): fitting the imputer on the full training set was too slow, so it was fitted on a 10% sample of train and applied to train and test.
 - **Notebooks that no longer ran** (recovery): moved data paths, an absolute path from another machine, a module alias overwritten by a file handle, and helper functions that used `scipy` without importing it. Found by running every notebook in a fresh kernel and by a synthetic end-to-end run.
 - **Hidden state between notebooks** (recovery): a cell in notebook 03 only worked because cells had been run out of order; in a linear run it turned an encoded column back into text. Fixed so the notebooks run top to bottom.
@@ -28,6 +28,7 @@ Short prep notes for discussing this project. "Original work" means the November
 ## Verifiable results and limitations
 
 - Test set (61,503 rows, default rate 8.1%): ROC AUC 0.732, PR AUC 0.205. Threshold 0.5: recall 0.447, precision 0.201. Validation-chosen threshold 0.38: recall 0.655, precision 0.157. Source: `reports/metrics.json`, produced by `scripts/run_pipeline.py`.
+- Reproducible: two full runs on the real data (working environment, and a fresh clone with a new environment) gave identical metrics and a byte-identical model file.
 - The synthetic-data CI run proves the code executes end to end; it says nothing about model quality.
 - Limitations: one train/test split (no confidence intervals); target encoding fitted in-sample on train; EDA decisions (column drops) taken on the full dataset before splitting; probabilities not calibrated (the model was trained on resampled data); the `saga` solver stops at `max_iter` without converging; `DAYS_EMPLOYED` keeps a placeholder value for pensioners, so its weight is not a tenure effect; no inference pipeline for raw new applications; no fairness analysis although gender and family variables are in the data.
 
