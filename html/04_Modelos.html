@@ -7517,7 +7517,7 @@ a.anchor-link {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <blockquote>
-<p>Nota (recuperación, oct. 2026): el split train/test tiene ahora semilla fija y el pipeline se ha vuelto a ejecutar de principio a fin. Las cifras citadas en el texto de este notebook son las de la ejecución original (dic. 2024); los valores de esta ejecución son los que aparecen en las salidas de las celdas.</p>
+<p>Nota (recuperación, oct. 2026): el split train/test tiene ahora semilla fija y el pipeline se ha vuelto a ejecutar de principio a fin. Las cifras citadas en el texto se han actualizado a esta ejecución; las conclusiones no cambian.</p>
 </blockquote>
 </div>
 </div>
@@ -8491,7 +8491,7 @@ Matriz de confusión:
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Configurar SMOTE</span>
 <span class="n">smote</span> <span class="o">=</span> <span class="n">SMOTE</span><span class="p">(</span>
-    <span class="n">sampling_strategy</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>  <span class="c1"># La clase minoritaria será el 50% de la mayoritaria</span>
+    <span class="n">sampling_strategy</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>  <span class="c1"># La clase minoritaria será el 40% de la mayoritaria</span>
     <span class="n">k_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>          <span class="c1"># Usar 4 vecinos para interpolación</span>
     <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>        <span class="c1"># Reproducibilidad</span>
     <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span>               <span class="c1"># Usar todos los núcleos disponibles</span>
@@ -8567,9 +8567,9 @@ Name: count, dtype: float64
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>Finalmente, he logrado alcanzar una distribución en la que la clase minoritaria representa el 37.5% del total de observaciones. Para llegar a este equilibrio, he aplicado las siguientes técnicas:</p>
 <ul>
-<li><p>56,406 observaciones de la clase minoritaria generadas mediante SMOTE, lo que representa un incremento del 28.7% respecto al total inicial de 196,806 observaciones.</p>
+<li><p>56,413 observaciones de la clase minoritaria generadas mediante SMOTE, lo que representa un incremento del 28.7% respecto al total inicial de 196,806 observaciones.</p>
 </li>
-<li><p>60,290 observaciones de la clase mayoritaria eliminadas mediante RandomUnderSampler, lo que equivale a una reducción del 23.8% respecto al total inicial.</p>
+<li><p>60,291 observaciones de la clase mayoritaria eliminadas mediante RandomUnderSampler, lo que equivale a una reducción del 23.8% respecto al total inicial.</p>
 </li>
 </ul>
 </div>
@@ -8797,12 +8797,12 @@ model score: 0.900
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="3.2.---Modelos-candidatos">3.2. - Modelos candidatos<a class="anchor-link" href="#3.2.---Modelos-candidatos">¶</a></h1><p>Antes de comenzar a optimizar los modelos, voy a dejar una serie de aclaraciones, primero voy a comentar un poco los modelos que voy a usar, en orden de resultados. Seguidamente, voy a explicar un poco la difernecia entre 'RandomizedSearch' y 'GridSearch'.</p>
 <ol>
-<li><p>El modelo de regreisón logística es el que mejor resultados ofrece en términos de accuracy y recall.
-El objetivo es maximizar la capacidad de predecir clientes insolventes (y = 1), priorizando un recall alto sin comprometer demasiado la precisión. En este caso, mantiene una buena precisión (81%) con un recall mucho más elevado que los demás (44%).</p>
+<li><p>El modelo de regreisón logística es el que mejor equilibrio ofrece entre accuracy y recall.
+El objetivo es maximizar la capacidad de predecir clientes insolventes (y = 1), priorizando un recall alto sin comprometer demasiado la precisión. En este caso, mantiene un buen accuracy (81%) con un recall mucho más elevado que el resto de modelos con un accuracy parecido (44%).</p>
 </li>
 <li><p>Haré un árbol de decisión porque generalmente identifica bien el recall. No da los mejores resultados pero creo que puede ser interesante ver si puede mejoar con la optimización para almenos acercarse a la regresión logística.</p>
 </li>
-<li><p>También voy a analizar el modelo Gaussiano porque es el que mejor es capaz de predecir los casos de insolvencia (72%). El problema es que la precisión que tiene no es buena, veré si se puede mejorar.
+<li><p>También voy a analizar el modelo Gaussiano porque es el que mejor es capaz de predecir los casos de insolvencia (74%). El problema es que la precisión que tiene no es buena, veré si se puede mejorar.
 No se aplica semilla porque es determinista, es decir, siempre que no se alteren variables, parámetros, etc., dará el mismo resultado, ya que es fruto de operaciones lineales, añadiendo al final el link que da los resultados en un intervalo.
 Además, como es un modelo que no implica demasiado cómputo, usaré el método GridSearch, en el cual tampoco se aplica semilla porque realiza todas las combinaciones posibles y no tiene el componente de aleatoriedad que tiene el Randomized.</p>
 </li>
@@ -9532,8 +9532,8 @@ Matriz de confusión (normalizada):
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Me-voy-a-quedar-con-el-modelo-de-regresi%C3%B3n-log%C3%ADstica">Me voy a quedar con el modelo de regresión logística<a class="anchor-link" href="#Me-voy-a-quedar-con-el-modelo-de-regresi%C3%B3n-log%C3%ADstica">¶</a></h1><p>Como he podido ver, el <strong>modelo de regresión logística es que mejor se comporta, en terminos de recall, y además mantiendo una buena precisión.</strong> Es el modelo que voy a utilizar por su capacidad de predecir la posibilidad de impago en un 45% de los casos.
-Como lo voy evaluar en el siguiente notebook, dejo aquí los resultados del árbol de decisión que ha funcionado muy bien gracias a pesar de ser el que menos cómputo requiere.</p>
+<h1 id="Me-voy-a-quedar-con-el-modelo-de-regresi%C3%B3n-log%C3%ADstica">Me voy a quedar con el modelo de regresión logística<a class="anchor-link" href="#Me-voy-a-quedar-con-el-modelo-de-regresi%C3%B3n-log%C3%ADstica">¶</a></h1><p>Como he podido ver, el <strong>modelo de regresión logística es que mejor se comporta, en terminos de recall, y además mantiendo una buena precisión.</strong> Es el modelo que voy a utilizar por su capacidad de predecir la posibilidad de impago en un 44% de los casos.
+Como lo voy evaluar en el siguiente notebook, dejo aquí los resultados del árbol de decisión que ha funcionado muy bien a pesar de ser el que menos cómputo requiere.</p>
 </div>
 </div>
 </div>
@@ -9545,7 +9545,7 @@ Como lo voy evaluar en el siguiente notebook, dejo aquí los resultados del árb
 <div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1">###### Voy a dejar los resultados del modelo de regresión logística que es el que mejores resultados ha dado</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">###### Dejo los resultados del árbol de decisión; la regresión logística, que es el modelo elegido, se evalúa en el notebook 05</span>
 <span class="c1">######</span>
 <span class="n">model_opt</span> <span class="o">=</span> <span class="n">decision_tree_model</span>
 <span class="n">y_pred</span> <span class="o">=</span> <span class="n">decision_tree_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_val</span><span class="p">)</span>

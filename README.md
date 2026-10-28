@@ -162,7 +162,6 @@ This is a learning project. Known weaknesses:
 - **No fairness analysis**, although the data includes gender, age and family status.
 - **Old stack.** Everything is pinned to the Python 3.8 environment the notebooks were written in, and Python 3.8 no longer receives security fixes. Pinning matters here: during the recovery a newer release of an indirect dependency (`mistune`) broke the HTML export, which is why `constraints.txt` now freezes the whole dependency tree.
 - **CI uses synthetic data.** It proves the code runs end to end, not that the model is good; the real-data runs were done locally.
-- The Spanish commentary inside the notebooks quotes the numbers of the original December 2024 run (see [Project history](#project-history)).
 
 ## Repository structure
 
@@ -192,9 +191,10 @@ The analysis and modelling were done between November 2024 and January 2025 as a
 - a cell in notebook 03 that overwrote an already-encoded column with raw text, and an exported category-to-encoding mapping that was misaligned;
 - a fixed seed for the train/test split, removal of the `SK_ID_CURR` identifier from the model inputs, feature-selector comparison moved from the test set to a validation split, and the decision threshold now chosen on validation instead of test;
 - seeds for the stochastic selectors used only in the selector comparison, and a hand-written column list in notebook 04 that assumed the original feature selection (the fixed seed changed the selected set slightly: 23 of the 26 features are the same as in the original run);
-- pinned `requirements.txt` and `constraints.txt`, the runner script, the synthetic dataset, the test and CI, and the `reports/` output.
+- pinned `requirements.txt` and `constraints.txt`, the runner script, the synthetic dataset, the test and CI, and the `reports/` output;
+- the Spanish commentary in notebooks 02-05 updated to the numbers of the current run, plus four readings the data did not support: a recent ID-document change goes with *more* default risk, not less; `EMERGENCYSTATE_MODE` describes the building, not the client's finances, and its high association with the other building variables comes mostly from shared missing values; `DAYS_EMPLOYED` acts mostly as a pensioner flag rather than as a sign that longer tenure raises risk; and the external scores (`EXT_SOURCE_*`) do carry weight in the model, just less than the top four features.
 
-The text inside the notebooks still quotes the numbers of the original December 2024 run; the cell outputs, `reports/` and this README come from the current run.
+The cell outputs, the commentary, `reports/` and this README all come from the current run. The first two settings listed in the selector notes of notebook 03 are experiments from the original run and were not repeated.
 
 ## License
 
